@@ -1,0 +1,5 @@
+include README.md
+recursive-exclude * __pycache__
+recursive-exclude * venv
+recursive-exclude * .idea
+recursive-exclude * .mypy_cache

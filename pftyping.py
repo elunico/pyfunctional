@@ -1,8 +1,13 @@
 from typing import *
+import sys
+
+if sys.version.startswith('3.7'):
+    class Protocol:
+        pass
 
 
 class Indexable(Protocol):
-  # Protocols for indexable object for rreduce
+    # Protocols for indexable object for rreduce
     def __getitem__(self, index: int) -> Any: ...
     def __len__(self) -> int: ...
 

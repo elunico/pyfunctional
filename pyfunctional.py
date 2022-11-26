@@ -1,7 +1,4 @@
-from typing import *
-
-T = TypeVar('T')
-X = TypeVar('X', bound=BaseException)
+from pftyping import *
 
 
 def attempt(
@@ -17,9 +14,6 @@ def attempt(
         return block(*args, **kwargs)
     except catch:
         return default
-
-
-S = TypeVar('S')
 
 
 def alleq(iterable: Iterable[S]) -> bool:
@@ -48,9 +42,6 @@ class transpose:
         return next(self.result)
 
 
-E = TypeVar("E")
-
-
 class repeat:
     def __init__(self, item: E, number: int) -> None:
         if number < 0:
@@ -75,3 +66,37 @@ class repeat:
             raise StopIteration()
         self.count += 1
         return self.item
+
+
+class openrange:
+    def __init__(self, start: int, *, step: int = 1):
+        self.start = start
+        self.current = start
+        self.step = step
+
+    def __iter__(self) -> 'openrange':
+        return self
+
+    def __next__(self) -> int:
+        temp = self.current
+        self.current += self.step
+        return temp
+
+    def __repr__(self) -> str:
+        return 'openrange({}{})'.format(self.start, ', step={}'.format(self.step) if self.step != 1 else '')
+
+    def __str__(self) -> str:
+        return repr(self)
+
+
+def rreduce(
+    reduction: Callable[[R, E], R],
+    indexable: Indexable,
+    initvalue: Union[R, Sentinel] = sentinel
+) -> R:
+    if initvalue is sentinel and len(indexable) == 0:
+        raise ValueError("rreduce() of empty sequence with no initial value")
+    acc = initvalue if initvalue is not sentinel else indexable[-1]
+    for i in range(-2 if initvalue is sentinel else -1, -len(indexable) - 1, -1):
+        acc = reduction(acc, indexable[i])
+    return acc

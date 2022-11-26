@@ -39,3 +39,23 @@ attempt(
 ```
 
 a function that takes a callable, a default value, a list of excpetion types, an arg tuple, and a kwarg dict and calls the callable, catching the exceptions specified, and returning the function value on success, the default value on a known caught exception, and allowing any other none-accounted for exceptions bubble up.
+
+```python
+rreduce(
+    reduction: Callable[[R, E], R],
+    indexable: Indexable,
+    initvalue: Union[R, Sentinel] = sentinel
+) -> R
+```
+
+Performs the same operation as `functools.reduce` but working from the right side (high indices) of the collection rather than the start (lower indices) of the collection. Requires the collection to support `len()` and indexing (iterators do not support `__getitem__` but lists and tuples--for example--do)
+
+Not the specification for `Indexable` below
+
+```python
+from typing import Protocol
+
+class Indexable(Protocol):
+  def __getitem__(self, index: int) -> Any: ...
+  def __len__(self) -> int: ...
+```

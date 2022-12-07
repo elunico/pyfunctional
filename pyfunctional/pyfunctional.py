@@ -1,4 +1,5 @@
-from pftyping import *
+import functools
+from pyfunctional.pftyping import *
 
 
 def attempt(
@@ -100,3 +101,22 @@ def rreduce(
     for i in range(-2 if initvalue is sentinel else -1, -len(indexable) - 1, -1):
         acc = reduction(acc, indexable[i])
     return acc
+
+
+def commute(fn: Callable[[S, T], R]) -> Callable[[T, S], R]:
+    if not callable(fn):
+        raise TypeError("Cannot commute non callable object {}".format(fn))
+
+    if fn.__code__.argcount != 2:
+        # todo: support varargs
+        raise ValueError("Function must have exactly 2 arguments not")
+
+    @functools.wraps(fn)
+    def inside(a, b):
+        return fn(b, a)
+
+    return inside
+
+
+def identity(x: T) -> T:
+    return x

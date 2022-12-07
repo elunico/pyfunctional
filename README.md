@@ -42,6 +42,8 @@ attempt(
 
 a function that takes a callable, a default value, a list of excpetion types, an arg tuple, and a kwarg dict and calls the callable, catching the exceptions specified, and returning the function value on success, the default value on a known caught exception, and allowing any other none-accounted for exceptions bubble up.
 
+---
+
 ```python
 rreduce(
     reduction: Callable[[R, E], R],
@@ -62,11 +64,15 @@ class Indexable(Protocol):
   def __len__(self) -> int: ...
 ```
 
+---
+
 ```python
 def commute(fn: Callable[[S, T], R]) -> Callable[[T, S], R]
 ```
 
 Commutes the operands of a binary function. Does not (yet) work for varargs or functions other than 2-arity
+
+---
 
 ```python
 def identity(x: T) -> T

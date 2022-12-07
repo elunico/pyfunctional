@@ -1,5 +1,7 @@
 # pyfunctional
 
+Find it [on PyPI](https://pypi.org/project/pyfunctional-elunico/)
+
 This is a collection of functional tools I like to use in Python
 
 ## Contents

@@ -120,3 +120,15 @@ def commute(fn: Callable[[S, T], R]) -> Callable[[T, S], R]:
 
 def identity(x: T) -> T:
     return x
+
+
+def bind(fn: Callable[[Any], R], arg: Any, position: int = 0) -> Callable[[Any], R]:
+    if not hasattr(fn, '__code__'):
+        raise TypeError("fn is not a function")
+    if fn.__code__.co_argcount <= position:
+        raise ValueError("Function does not have an argument at position {}".format(position))
+    return functools.wraps(fn)(lambda *args: fn(*args[:position], arg, *args[position:]))
+
+
+def full(fn: Callable[[Any], R], *args: Any) -> Callable[[], R]:
+    return functools.wraps(fn)(lambda: fn(*args))

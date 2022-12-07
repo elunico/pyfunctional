@@ -61,3 +61,15 @@ class Indexable(Protocol):
   def __getitem__(self, index: int) -> Any: ...
   def __len__(self) -> int: ...
 ```
+
+```python
+def commute(fn: Callable[[S, T], R]) -> Callable[[T, S], R]
+```
+
+Commutes the operands of a binary function. Does not (yet) work for varargs or functions other than 2-arity
+
+```python
+def identity(x: T) -> T
+```
+
+The identity function

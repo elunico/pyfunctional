@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pyfunctional-elunico",
-    version="0.10.0",
+    version="0.11.0",
     author="Thomas Povinelli",
     author_email="tompov227@gmail.com",
     description="A small collection of functions I find useful",

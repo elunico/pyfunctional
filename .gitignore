@@ -6,3 +6,4 @@ venv/
 dist
 build
 __pycache__
+interrun.py

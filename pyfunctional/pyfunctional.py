@@ -1,4 +1,5 @@
 import functools
+import copy
 from pyfunctional.pftyping import *
 
 
@@ -57,9 +58,12 @@ class repeat:
     """
     an iterable object that takes an element and a count and returns that
     element `count` times
+
+    If `copying` is True then each element from the iterator will be a copy of the original
+    if `copying` is False then the same object will be returned each time next is called
     """
 
-    def __init__(self, item: E, number: int) -> None:
+    def __init__(self, item: E, number: int, copying: bool = True) -> None:
         if number < 0:
             raise ValueError("Number cannot be < 0")
         if type(number) is not int:
@@ -67,6 +71,7 @@ class repeat:
         self.item = item
         self.number = number
         self.count = 0
+        self.transform = copy.deepcopy if copying else identity
 
     def __repr__(self) -> str:
         return 'repeat({}, {})'.format(repr(self.item), repr(self.number))
@@ -81,7 +86,7 @@ class repeat:
         if self.count == self.number:
             raise StopIteration()
         self.count += 1
-        return self.item
+        return self.transform(self.item)
 
 
 class openrange:

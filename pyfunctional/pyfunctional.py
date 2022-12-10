@@ -39,10 +39,15 @@ class transpose:
     """an iterable object that takes a nested iterable and transposes it lazily"""
 
     def __init__(self, double_iterable: Iterable[Iterable[S]]) -> None:
-        self.result = zip(*double_iterable)
+        if isinstance(double_iterable, transpose):
+            self.result = double_iterable.original
+            self.original = double_iterable.result
+        else:
+            self.original = copy.deepcopy(double_iterable)
+            self.result = zip(*double_iterable)
 
     def __repr__(self) -> str:
-        return 'transpose object at {}'.format(hex(id(self)))
+        return '<transpose object at {}>'.format(hex(id(self)))
 
     def __str__(self) -> str:
         return repr(self)
@@ -142,11 +147,7 @@ def commute(fn: Callable[[S, T], R]) -> Callable[[T, S], R]:
         # todo: support varargs
         raise ValueError("Function must have exactly 2 arguments not")
 
-    @functools.wraps(fn)
-    def inside(a, b):
-        return fn(b, a)
-
-    return inside
+    return functools.wraps(fn)(lambda a, b: fn(b, a))
 
 
 def identity(x: T) -> T:
@@ -158,7 +159,9 @@ def identity(x: T) -> T:
 
 def bind(fn: Callable[[Any], R], arg: Any, position: int = 0) -> Callable[[Any], R]:
     """
-    Given a `n`-arity function `fn`, bind `arg` to the `position`th argument of `fn` and return a new function which takes `n-1` args. The new function behaves as if the positional argument at `posititon` was removed from the argument order.
+    Given a `n`-arity function `fn`, bind `arg` to the `position`th argument of `fn`
+    and return a new function which takes `n-1` args. The new function behaves as if
+    the positional argument at `posititon` was removed from the argument order.
 
     The argument count is 0 based
 
@@ -166,8 +169,10 @@ def bind(fn: Callable[[Any], R], arg: Any, position: int = 0) -> Callable[[Any],
     """
     if not hasattr(fn, '__code__'):
         raise TypeError("fn is not a function")
+
     if fn.__code__.co_argcount <= position:
         raise ValueError("Function does not have an argument at position {}".format(position))
+
     return functools.wraps(fn)(lambda *args: fn(*args[:position], arg, *args[position:]))
 
 

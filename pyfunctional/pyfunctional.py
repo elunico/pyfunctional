@@ -157,15 +157,27 @@ def identity(x: T) -> T:
     return x
 
 
+def alwaysfalse(*args, **kwargs) -> bool:
+    return False
+
+
+def alwaystrue(*args, **kwargs) -> bool:
+    return True
+
+
+def alwaysnone(*args, **kwargs) -> None:
+    return None
+
+
 def bind(fn: Callable[[Any], R], arg: Any, position: int = 0) -> Callable[[Any], R]:
     """
     Given a `n`-arity function `fn`, bind `arg` to the `position`th argument of `fn`
     and return a new function which takes `n-1` args. The new function behaves as if
-    the positional argument at `posititon` was removed from the argument order.
+    the positional argument at `position` was removed from the argument order.
 
     The argument count is 0 based
 
-    If `fn.__code__.co_argcount` is less or equal to `posititon` the function will raise a `ValueError`
+    If `fn.__code__.co_argcount` is less or equal to `position` the function will raise a `ValueError`
     """
     if not hasattr(fn, '__code__'):
         raise TypeError("fn is not a function")

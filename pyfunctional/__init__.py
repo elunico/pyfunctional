@@ -7,4 +7,8 @@ __all__ = [
     'alleq',
     'attempt',
     'openrange',
+    'alwaystrue',
+    'alwaysfalse',
+    'alwaysnone',
+    'identity',
 ]
